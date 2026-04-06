@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { SiteSearchForm } from "@/components/site-search-form";
 import { SkillDirectory } from "@/components/skill-directory";
 import { getCategoryCounts, listSkills } from "@/lib/queries/skills";
 import { parseHomeListQuery } from "@/lib/validation";
+
+export const metadata: Metadata = {
+  title: "已发布 Skill 与 MCP 目录",
+  description: "浏览 PowerUp V1 已发布的 Skill 与 MCP Server，支持分类、类型、排序、分页与基础关键词搜索。",
+};
 
 interface HomePageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

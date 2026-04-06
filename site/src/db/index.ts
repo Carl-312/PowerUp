@@ -12,7 +12,7 @@ const resolveDatabasePath = () => {
 
   return path.isAbsolute(configuredPath)
     ? configuredPath
-    : path.join(process.cwd(), configuredPath);
+    : path.join(/* turbopackIgnore: true */ process.cwd(), configuredPath);
 };
 
 const databasePath = resolveDatabasePath();

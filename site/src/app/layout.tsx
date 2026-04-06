@@ -52,6 +52,12 @@ export default function RootLayout({
                   >
                     MCP
                   </Link>
+                  <Link
+                    href="/about"
+                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 transition hover:border-amber-300 hover:text-zinc-950"
+                  >
+                    关于
+                  </Link>
                 </nav>
               </div>
               <div className="w-full lg:max-w-md">
@@ -97,6 +103,9 @@ export default function RootLayout({
                     className="rounded-full bg-zinc-100 px-3 py-1.5 transition hover:bg-zinc-200"
                   >
                     只看 MCP
+                  </Link>
+                  <Link href="/about" className="rounded-full bg-zinc-100 px-3 py-1.5 transition hover:bg-zinc-200">
+                    关于项目
                   </Link>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -12,6 +13,23 @@ interface CategoryPageProps {
     category: string;
   }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export async function generateMetadata({
+  params,
+}: Pick<CategoryPageProps, "params">): Promise<Metadata> {
+  const { category } = await params;
+
+  if (!CATEGORY_SLUGS.includes(category as CategorySlug)) {
+    notFound();
+  }
+
+  const categorySlug = category as CategorySlug;
+
+  return {
+    title: `${CATEGORY_LABELS[categorySlug]} 分类`,
+    description: `浏览 ${CATEGORY_LABELS[categorySlug]} 分类下已发布的 Skill 与 MCP 条目，支持类型、排序与分页。`,
+  };
 }
 
 export default async function CategoryPage({

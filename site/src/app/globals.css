@@ -130,3 +130,78 @@
     @apply font-sans;
   }
 }
+
+@layer components {
+  .markdown-content {
+    @apply text-[15px] leading-8 text-zinc-700;
+  }
+
+  .markdown-content > * + * {
+    @apply mt-4;
+  }
+
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4 {
+    @apply font-semibold tracking-tight text-zinc-950;
+  }
+
+  .markdown-content h1 {
+    @apply text-3xl;
+  }
+
+  .markdown-content h2 {
+    @apply text-2xl;
+  }
+
+  .markdown-content h3 {
+    @apply text-xl;
+  }
+
+  .markdown-content p {
+    @apply text-zinc-700;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    @apply ml-6 space-y-2;
+  }
+
+  .markdown-content ul {
+    @apply list-disc;
+  }
+
+  .markdown-content ol {
+    @apply list-decimal;
+  }
+
+  .markdown-content li > ul,
+  .markdown-content li > ol {
+    @apply mt-2;
+  }
+
+  .markdown-content a {
+    @apply font-medium text-amber-900 underline decoration-amber-300 underline-offset-4 transition hover:text-amber-700;
+  }
+
+  .markdown-content blockquote {
+    @apply rounded-r-2xl border-l-4 border-amber-200 bg-amber-50/70 px-4 py-3 text-zinc-700;
+  }
+
+  .markdown-content hr {
+    @apply my-6 border-zinc-200;
+  }
+
+  .markdown-content :not(pre) > code {
+    @apply rounded bg-amber-100 px-1.5 py-0.5 font-mono text-[0.92em] text-amber-950;
+  }
+
+  .markdown-content pre {
+    @apply overflow-x-auto rounded-[28px] bg-zinc-950 px-5 py-4 text-sm leading-7 text-zinc-100 shadow-sm;
+  }
+
+  .markdown-content pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
+}

@@ -133,7 +133,14 @@ const SkillCard = ({ item }: { item: SkillListItem }) => {
           <p className="text-xs text-zinc-500">更新于 {formatUpdatedAt(item.updated_at)}</p>
         </div>
         <div className="space-y-2">
-          <CardTitle className="text-lg text-zinc-950">{item.name}</CardTitle>
+          <CardTitle className="text-lg text-zinc-950">
+            <Link
+              href={`/skill/${item.slug}`}
+              className="transition hover:text-amber-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-200"
+            >
+              {item.name}
+            </Link>
+          </CardTitle>
           <CardDescription className="line-clamp-3 text-sm leading-6 text-zinc-600">
             {item.summary}
           </CardDescription>
@@ -181,6 +188,9 @@ const SkillCard = ({ item }: { item: SkillListItem }) => {
       <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/70 px-5 py-4">
         <span className="text-xs text-zinc-500">{item.slug}</span>
         <div className="flex flex-wrap gap-2">
+          <Button asChild size="sm" className="rounded-full bg-zinc-950 text-white hover:bg-zinc-800">
+            <Link href={`/skill/${item.slug}`}>详情</Link>
+          </Button>
           {item.doc_url ? (
             <Button asChild variant="outline" size="sm" className="rounded-full border-zinc-200">
               <a href={item.doc_url} target="_blank" rel="noreferrer">
