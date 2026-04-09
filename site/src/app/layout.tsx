@@ -112,7 +112,11 @@ export default function RootLayout({
               <div className="space-y-3">
                 <h2 className="text-base font-semibold text-zinc-950">当前边界</h2>
                 <p className="leading-7">
-                  暂不包含公开 API、即时搜索建议、FTS5、部署硬化和深色模式。统一搜索表单始终回到
+                  当前已提供面向独立前端的
+                  <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-medium text-zinc-950">
+                    /api/v1
+                  </code>
+                  读取接口；暂不包含即时搜索建议、FTS5、部署硬化和深色模式。统一搜索表单始终回到
                   <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-medium text-zinc-950">
                     /?q=
                   </code>

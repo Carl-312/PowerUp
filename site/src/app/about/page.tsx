@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 
 import { MarkdownRenderer } from "@/components/skill/markdown-renderer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ABOUT_DOCUMENT_TITLE, readAboutContent } from "@/lib/content/about";
 
 export const metadata: Metadata = {
   title: "关于",
   description: "了解 PowerUp V1 的目标、收录范围、当前边界与非首版阻塞项。",
 };
-
-const readAboutContent = async () =>
-  readFile(path.join(process.cwd(), "src/content/about.md"), "utf8");
 
 export default async function AboutPage() {
   const content = await readAboutContent();
@@ -34,7 +30,7 @@ export default async function AboutPage() {
 
       <Card className="rounded-[30px] border-none bg-white/90 py-0 shadow-sm ring-1 ring-zinc-950/8">
         <CardHeader className="gap-2 border-b border-zinc-100 px-6 py-5">
-          <CardTitle className="text-xl text-zinc-950">V1 边界说明</CardTitle>
+          <CardTitle className="text-xl text-zinc-950">{ABOUT_DOCUMENT_TITLE}</CardTitle>
           <p className="text-sm leading-7 text-zinc-600">
             本页为静态说明页，专门用来解释 PowerUp 当前做什么、不做什么。
           </p>

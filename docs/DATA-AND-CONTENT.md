@@ -85,7 +85,7 @@
 - `files-storage`
 - `other`
 
-当前 seed 与本地数据库快照实际覆盖其中 8 个分类，未覆盖：
+当前 seed 基线实际覆盖其中 8 个分类，未覆盖：
 
 - `business-finance`
 - `security-ops`
@@ -131,7 +131,8 @@
 
 - seed 文件定义了 18 条样本记录
 - 类型同时覆盖 `skill` 与 `mcp_server`
-- 本次只读核对时，本地 `site/data/powerup.db` 也正好是 18 条 `published` 记录
+- 按当前 seed 归一化规则，这 18 条样本默认都会进入 `published`
+- 当前仓库不要求预先存在 `site/data/powerup.db`；如未设置 `DATABASE_URL`，运行时和数据库脚本会按默认路径创建它
 
 ### 不要误判的边界
 

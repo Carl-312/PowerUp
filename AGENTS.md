@@ -5,22 +5,36 @@ This repository is a solo, local-use brownfield GSD project.
 ## Scope
 
 - Repo root is orchestration root, not app root.
+- `README.md` is the repo entry document.
 - Real app root is `site/`.
-- `.planning/` is the GSD control layer.
-- `docs/` records current implementation and drift notes.
-- `specs-v1/` is contract/history, not the default source of runtime truth.
+- `docs/` records current implementation, boundaries, and drift notes.
+- `specs-v1/` keeps PRD and contract docs.
+- `specs-v1/_history/` keeps historical walkthroughs.
+- `.planning/` is the GSD execution layer, not the current implementation source.
 
 ## Read Order
 
 When working from repo root, read in this order:
 
 1. `AGENTS.md`
-2. `.planning/PROJECT.md`
-3. `.planning/ROADMAP.md`
-4. relevant `docs/*.md`
-5. `site/AGENTS.md` before editing anything under `site/`
+2. `README.md`
+3. `docs/README.md`
+4. `docs/CURRENT-STATE.md`
+5. `docs/ARCHITECTURE.md`
+6. `docs/ROUTING-RENDER-SEARCH.md`
+7. `docs/DATA-AND-CONTENT.md`
+8. `docs/DEVELOPMENT.md`
+9. `docs/DRIFT-AND-SOURCES-OF-TRUTH.md`
+10. `.planning/PROJECT.md`
+11. `.planning/ROADMAP.md`
+12. `specs-v1/README.md`
+13. `specs-v1/PRD.md`
+14. `specs-v1/terms-and-directory-contract.md`
+15. `specs-v1/routing-render-search-contract.md`
 
-Prefer current code and `docs/` over stale walkthrough material.
+Before editing anything under `site/`, also read `site/AGENTS.md`.
+
+Prefer current code and `docs/` over `_history/` walkthrough material.
 
 ## Hard Rules
 
@@ -29,43 +43,37 @@ Prefer current code and `docs/` over stale walkthrough material.
 - Do not run `/gsd-new-project`.
 - Do not run `/gsd-new-milestone`.
 - Do not rebuild `.planning/codebase/**` unless explicitly asked.
-- Do not change `specs-v1/**` unless explicitly asked.
+- Do not promote `_history/**` back into the default current-state entry path.
+- Do not rewrite `specs-v1/**` unless the task is explicitly about PRD, contract, or document governance.
 
-## Current GSD Baseline
+## Current GSD Footing
 
-The minimum GSD structure already exists and should be preserved:
+The current repo only guarantees this lightweight execution layer:
 
 - `.planning/STATE.md`
 - `.planning/config.json`
+- `.planning/PROJECT.md`
 - `.planning/ROADMAP.md`
-- `.planning/phases/01-automation-validation/`
+- `.planning/REQUIREMENTS.md`
 
-Phase 1 slug is `automation-validation`.
+Do not delete `.planning/STATE.md` or `.planning/config.json`. They are required for normal GSD flow.
+Do not assume `.planning/phases/**`, plan artifacts, or research folders already exist.
 
-Note: `.planning/PROJECT.md` contains older guard text saying not to create
-`STATE.md` or `config.json`. That is stale for the current repo state.
-Do not delete those files. They are now required for normal GSD flow.
-
-## Closed Loop
+## GSD Routing
 
 Use GSD from repo root for orchestration, then use `site/` for code validation.
 
-Default loop for most tasks:
+Default routing:
 
-1. Run `/gsd-next`.
-2. If routed to discuss, use `/gsd-discuss-phase 1` or the phase you are on.
-3. Create plans with `/gsd-plan-phase 1`.
-4. Execute with `/gsd-execute-phase 1`.
-5. Verify with `/gsd-verify-work 1` when execution completes.
-6. Run `/gsd-next` again to move forward.
-
-In the repo's current repaired state, `/gsd-next` should route to Phase 1
-discussion/planning flow rather than fail on missing GSD structure.
+1. Start with `/gsd-do` or `/gsd-progress` to route the task against the current repo state.
+2. If the task truly needs a phase, then use `/gsd-discuss-phase <n>`, `/gsd-plan-phase <n>`, `/gsd-execute-phase <n>`, and `/gsd-verify-work <n>`.
+3. Keep `.planning/**` forward-only; do not backfill fake historical phases just to satisfy tooling.
 
 ## Where Commands Run
 
 Run these from repo root:
 
+- `/gsd-do`
 - `/gsd-progress`
 - `/gsd-resume-work`
 - `/gsd-next`
@@ -87,6 +95,7 @@ Run app validation from `site/`:
 
 Use this decision rule:
 
+- Need freeform routing to the right GSD workflow: `/gsd-do`
 - Need project state: `/gsd-progress` or `/gsd-resume-work`
 - Need zero-friction continuation: `/gsd-next`
 - Need new phase context before planning: `/gsd-discuss-phase <n>`
@@ -99,9 +108,12 @@ Use this decision rule:
 For implementation questions, prefer:
 
 1. `site/src/app/**`
-2. `site/src/lib/queries/**`
-3. `site/src/lib/validation.ts`
-4. `site/src/db/**`
+2. `site/src/lib/**`
+3. `site/src/db/**`
+4. `site/src/types/**`
 5. `docs/**`
+6. `specs-v1/terms-and-directory-contract.md`
+7. `specs-v1/routing-render-search-contract.md`
+8. `specs-v1/PRD.md`
 
-Treat `site/README.md` and `specs-v1/walkthroughV2.md` as historical hints only.
+Treat `site/README.md` as a runtime manual and `specs-v1/_history/**` as historical hints only.

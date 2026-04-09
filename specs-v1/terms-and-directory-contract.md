@@ -1,13 +1,14 @@
 # PowerUp V1 术语与目录约定
 
-本文是 `T0-01` 的单一真源，用于冻结术语、目录职责、类型枚举和分类 slug。后续 `site/` 初始化完成后，代码实现必须按本文落地，避免在 `PRD.md`、`walkthrough.md` 和源码中出现多套口径。
+本文是保留的 contract 文档，用于冻结术语、目录职责、类型枚举和分类 slug。
+当前代码实现仍应与本文保持一致，避免在 `PRD.md`、walkthrough 历史文档和源码中出现多套口径。
 
 ---
 
 ## 1. 作用范围
 
-- 适用目录：`E:\cursorproject\PowerUp\specs-v1` 与未来的 `E:\cursorproject\PowerUp\site`。
-- 历史 `PRD.md`、历史 `walkthrough.md` 若存在，只作为参考输入，保持只读。
+- 适用目录：`/home/carl/PowerUp/specs-v1` 与当前应用根 `/home/carl/PowerUp/site`。
+- `PRD.md` 与 `./_history/` 下的 walkthrough 文档可作为产品层或历史层参考，但涉及术语、枚举、目录职责时以本文为准。
 - 本文冻结的是“命名和枚举”，不是视觉文案自由发挥区；涉及条目类型、分类、目录职责时，以本文为准。
 
 ---
@@ -15,10 +16,9 @@
 ## 2. 项目与目录职责
 
 - 项目正式名称固定为 `PowerUp`，不得回退到旧项目名或临时占位名。
-- `E:\cursorproject\PowerUp\specs-v1` 只放 V1 规格文档，不放运行时代码、脚手架文件、数据库文件。
-- `E:\cursorproject\PowerUp\site` 固定为唯一代码根目录；后续 `src/`、`public/`、`data/`、`drizzle/`、`package.json` 都在这里。
-- `E:\cursorproject\PowerUp` 根目录本身不直接承载 Next.js 应用代码，避免文档和实现混放。
-- 在 `site/` 尚未初始化前，不提前创建 `site/src/lib/categories.ts` 或 `site/src/types/skill.ts` 空文件，以免与 `T1-01` 的脚手架初始化冲突。
+- `/home/carl/PowerUp/specs-v1` 只放 V1 产品规格、contract 与历史归档文档，不放运行时代码、数据库文件或开发脚本。
+- `/home/carl/PowerUp/site` 是唯一应用根；当前 `src/`、`public/`、`data/`、`drizzle/`、`package.json` 都在这里。
+- `/home/carl/PowerUp` 根目录本身不直接承载 Next.js 应用代码，避免文档和实现混放。
 
 ---
 
@@ -100,6 +100,6 @@ export const CATEGORY_LABELS: Record<CategorySlug, string> = {
 ## 5. 执行约束
 
 - 后续实现只能从 `site/src/lib/categories.ts` 和 `site/src/types/skill.ts` 暴露分类与类型常量，禁止在页面、接口、seed 数据里重复维护第二套数组或映射。
-- 如果 `PRD.md`、`walkthrough.md` 与本文发生冲突，以本文为先，并同步回写冲突文案。
+- 如果 `PRD.md`、walkthrough 历史文档与本文发生冲突，以本文为先，并同步回写冲突文案。
 - 搜索、筛选、分页、详情查询等所有输入输出都必须沿用本文中的 slug 和类型内部值。
 - 验收时全文搜索 `PowerUp`、`mcp_server`、十个分类 slug，确认不存在第二套命名或旧项目名。

@@ -1,13 +1,19 @@
 # Development
 
-当前应用的开发、构建和数据库命令都必须从 `site/` 目录执行。
+当前仓库已经分成两个开发工作区：
+
+- `site/`：现有 Next.js 运行根、数据库层和 `api/v1`
+- `frontendv2/`：独立前端重构工作区
+
+因此不是所有命令都再从 `site/` 执行；需要按职责分别进入对应目录。
 
 ## 应用根
 
-- 仓库根：`E:\cursorproject\PowerUp`
-- 应用根：`E:\cursorproject\PowerUp\site`
+- 当前工作区仓库根：`/home/carl/PowerUp`
+- 当前后端 / BFF 根：`/home/carl/PowerUp/site`
+- 当前独立前端根：`/home/carl/PowerUp/frontendv2`
 
-不要在仓库根直接执行 Next.js、Drizzle 或数据库脚本。
+不要在仓库根直接执行 Next.js、Drizzle、数据库脚本或 frontendv2 的构建命令。
 
 ## 本地命令
 
@@ -28,6 +34,22 @@ npm run db:seed
 npm run db:studio
 ```
 
+在 `frontendv2/` 目录下：
+
+```bash
+npm install
+npm run dev
+npm run typecheck
+npm run build
+npm run preview
+```
+
+如果你当前目标是把 `frontendv2/` 逐步移植到正式前端，开始前建议先读：
+
+- `frontendv2/README.md`
+- `docs/FRONTEND-V2-SEPARATION.md`
+- `docs/FRONTEND-V2-MIGRATION-PROMPT.md`
+
 ## 数据库路径与 `DATABASE_URL`
 
 ### 运行时
@@ -36,6 +58,7 @@ npm run db:studio
 - 未设置时默认回退到 `data/powerup.db`
 - 相对路径会相对于 `site/` 运行目录解析
 - 按当前目录约定，默认数据库文件就是 `site/data/powerup.db`
+- 若目录或文件不存在，运行时代码会在首次访问时自动创建；仓库本身不保证预置该文件
 
 ### Drizzle 配置
 
@@ -72,6 +95,10 @@ npm run db:studio
   - `/category/[category]`
   - `/skill/[slug]`
   - 不存在或未发布 slug 的 404
+  - `/api/v1/skills`
+  - `/api/v1/skills/[slug]`
+  - `/api/v1/categories`
+  - `/api/v1/content/about`
 
 这样页面级验证也不需要把 `site/data/powerup.db` 当作唯一前提。
 
@@ -81,6 +108,7 @@ npm run db:studio
 - `typecheck`
 - 逻辑层自动化测试
 - 页面级 smoke 自动化
+- API 边界 smoke 自动化
 
 因此本地和 CI 都不需要把 `site/data/powerup.db` 当作唯一前提。
 
@@ -94,6 +122,20 @@ npm run db:studio
 - `/category/developer-tools`
 - `/skill/everything-mcp`
 - `/about`
+
+如果要人工确认独立前端，额外检查：
+
+- `frontendv2` 首页
+- `frontendv2/category/developer-tools`
+- `frontendv2/skill/everything-mcp`
+- `frontendv2/about`
+
+如果要做“逐步迁移到正式前端”的小步提交，建议每一轮都遵守：
+
+- 先选一个页面或一个局部模块，不做大爆炸替换
+- 先跑 `frontendv2` 的 `typecheck` 与 `build`
+- 再跑 `site/` 下与本轮变更有关的验证
+- 最后再做人工 spot check
 
 ### 数据库相关验证
 
@@ -111,6 +153,8 @@ npm run db:studio
 - 已有 `test` 与 `verify` 脚本
 - 已有 `test:smoke` 页面级验证入口
 - 已有最小 CI workflow
+- 已有可单独安装与构建的 `frontendv2/`
+- 已有可继续迁移的 `frontendv2/` 基线，但尚未替换正式入口
 - 没有仓库内可审计的部署配置
 
 因此当前验证方式仍以：
@@ -122,6 +166,8 @@ npm run db:studio
 - typecheck
 - build
 - verify
+- frontendv2 typecheck
+- frontendv2 build
 - 人工 spot check
 
 为主。

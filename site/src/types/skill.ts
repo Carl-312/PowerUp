@@ -1,6 +1,11 @@
 import type { CategorySlug } from "@/lib/categories";
+import {
+  POWERUP_SKILL_TYPE_LABELS,
+  POWERUP_SKILL_TYPES,
+  type PowerUpSkillType,
+} from "../../../shared/powerup-taxonomy";
 
-export const SKILL_TYPES = ["skill", "mcp_server"] as const;
+export const SKILL_TYPES = POWERUP_SKILL_TYPES;
 export const REVIEW_STATUSES = [
   "draft",
   "reviewed",
@@ -14,14 +19,11 @@ export const SOURCE_KINDS = [
   "community_directory",
 ] as const;
 
-export type SkillType = (typeof SKILL_TYPES)[number];
+export type SkillType = PowerUpSkillType;
 export type ReviewStatus = (typeof REVIEW_STATUSES)[number];
 export type SourceKind = (typeof SOURCE_KINDS)[number];
 
-export const SKILL_TYPE_LABELS: Record<SkillType, string> = {
-  skill: "Skill",
-  mcp_server: "MCP",
-};
+export const SKILL_TYPE_LABELS: Record<SkillType, string> = POWERUP_SKILL_TYPE_LABELS;
 
 export const PUBLIC_SKILL_FIELDS = [
   "name",

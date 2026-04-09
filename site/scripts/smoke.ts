@@ -194,6 +194,21 @@ const fetchPage = async (baseUrl: string, route: string) => {
   };
 };
 
+const fetchJson = async (baseUrl: string, route: string) => {
+  const response = await fetch(`${baseUrl}${route}`, {
+    headers: {
+      Accept: "application/json",
+    },
+    redirect: "manual",
+  });
+  const json = await response.json();
+
+  return {
+    response,
+    json,
+  };
+};
+
 const expectIncludes = (html: string, value: string, message: string) => {
   assert.ok(html.includes(value), `${message} Missing text: ${value}`);
 };
@@ -255,6 +270,47 @@ const runAssertions = async (baseUrl: string) => {
   expectIncludes(detail.html, "Everything MCP Server", "Published detail page should show the selected entry.");
   expectIncludes(detail.html, "基础信息", "Published detail page should render detail metadata.");
 
+  const directoryApi = await fetchJson(baseUrl, "/api/v1/skills?q=everything");
+  assert.equal(directoryApi.response.status, 200, "Directory API should respond successfully.");
+  assert.equal(directoryApi.json.meta.version, "v1", "Directory API should expose the API version.");
+  assert.equal(
+    directoryApi.json.data.directory.items[0]?.slug,
+    "everything-mcp",
+    "Directory API should return the published matching record.",
+  );
+  assert.ok(
+    directoryApi.json.data.categories.totalPublished >= directoryApi.json.data.directory.items.length,
+    "Directory API should include category counts for the independent frontend.",
+  );
+
+  const detailApi = await fetchJson(baseUrl, "/api/v1/skills/everything-mcp");
+  assert.equal(detailApi.response.status, 200, "Detail API should respond successfully.");
+  assert.equal(
+    detailApi.json.data.item.slug,
+    "everything-mcp",
+    "Detail API should expose the selected published record.",
+  );
+
+  const categoriesApi = await fetchJson(baseUrl, "/api/v1/categories");
+  assert.equal(categoriesApi.response.status, 200, "Categories API should respond successfully.");
+  assert.ok(
+    categoriesApi.json.data.totalPublished > 0,
+    "Categories API should expose published totals.",
+  );
+
+  const aboutApi = await fetchJson(baseUrl, "/api/v1/content/about");
+  assert.equal(aboutApi.response.status, 200, "About content API should respond successfully.");
+  assert.equal(
+    aboutApi.json.data.slug,
+    "about",
+    "About content API should expose the document slug.",
+  );
+  assert.ok(
+    typeof aboutApi.json.data.markdown === "string" &&
+      aboutApi.json.data.markdown.length > 0,
+    "About content API should return markdown content.",
+  );
+
   const hiddenSearch = await fetchPage(baseUrl, "/?q=smoke hidden draft");
   assert.equal(hiddenSearch.response.status, 200, "Draft search should still render the home results page.");
   expectIncludes(
@@ -270,6 +326,14 @@ const runAssertions = async (baseUrl: string) => {
 
   const hiddenDetail = await fetchPage(baseUrl, "/skill/smoke-hidden-draft");
   assert.equal(hiddenDetail.response.status, 404, "Unpublished detail pages must return 404.");
+
+  const hiddenDetailApi = await fetchJson(baseUrl, "/api/v1/skills/smoke-hidden-draft");
+  assert.equal(hiddenDetailApi.response.status, 404, "Unpublished detail API requests must return 404.");
+  assert.equal(
+    hiddenDetailApi.json.error.code,
+    "skill_not_found",
+    "Detail API should return a stable not-found error code.",
+  );
 
   const missingDetail = await fetchPage(baseUrl, "/skill/does-not-exist");
   assert.equal(missingDetail.response.status, 404, "Missing detail pages must return 404.");

@@ -4,9 +4,9 @@
 
 ## 本次核对范围
 
-- 已读取：`site/src/app/**`、`site/src/lib/queries/skills.ts`、`site/src/lib/validation.ts`、`site/src/db/**`、`site/src/types/skill.ts`
-- 已对照：`.planning/codebase/**`、`specs-v1/PRD.md`、两份 contract、`specs-v1/walkthroughV2.md`、`site/README.md`
-- 已做只读数据库快照核对：本地 `site/data/powerup.db` 当前为 18 条记录，全部 `published`，分类覆盖 8 个一级分类
+- 已读取：`site/src/app/**`、`site/src/lib/**`、`site/src/db/**`、`site/src/types/**`、`frontendv2/src/**`、`site/scripts/**`、`.github/workflows/**`
+- 已对照：`docs/**`、`README.md`、`frontendv2/README.md`、`specs-v1/PRD.md`、两份 contract、两份 walkthrough 历史文档、`site/README.md`
+- 已做 seed 基线核对：`site/src/db/seed-data.ts` 当前定义 18 条样本记录，默认全部进入 `published`，分类覆盖 8 个一级分类
 
 ## 已实现
 
@@ -29,6 +29,36 @@
 - 关于页 `/about`
   - 已存在真实页面
   - 内容来自 `site/src/content/about.md`
+
+### API 与前后端分离
+
+- 已存在公开读取 API，不再是“只有页面直连查询层”的状态
+  - `GET /api/v1/skills`
+  - `GET /api/v1/skills/:slug`
+  - `GET /api/v1/categories`
+  - `GET /api/v1/content/about`
+- `site/src/lib/api/response.ts` 与 `site/src/lib/api/serializers.ts` 已承担 API 返回封装与 DTO 序列化职责
+- `site/src/lib/content/about.ts` 已承担 About 文档读取职责
+- `shared/**` 已承担前后端共享 taxonomy 与 API contract
+- `frontendv2/` 已通过独立 API client 消费上述接口，不再依赖 `site` 内部服务端查询导入
+
+### Frontend V2 当前状态
+
+- `frontendv2/` 已存在真实独立项目边界，不是概念目录
+- 当前已经实现：
+  - 首页 `/`
+  - 分类页 `/category/:category`
+  - 详情页 `/skill/:slug`
+  - 关于页 `/about`
+- 当前已具备：
+  - `react-router-dom` 路由与 loader
+  - API-first 请求层与开发 fallback
+  - 目录筛选、分页、错误态和加载态
+  - 一轮视觉精修与首屏性能优化
+    - 路由级懒加载
+    - Markdown 按需分包
+    - 非首屏内容延后渲染
+    - 字体加载策略优化
 
 ### 查询与参数处理
 
@@ -65,12 +95,12 @@
 - `tags`、`supported_platforms` 在库中以 JSON 文本存储，在查询层恢复为字符串数组
 - `review_status`、`source_kind`、类型枚举、分类枚举都已有集中定义
 - 当前 seed 基线为 18 条样本记录，类型覆盖 `skill` 与 `mcp_server`
+- 当前仓库树里不要求预置 `site/data/powerup.db`；未设置 `DATABASE_URL` 时，默认路径会在首次数据库访问时按代码约定创建
 
 ## 当前边界与明显缺口
 
-- 没有内部 API 层
-  - 未见 `site/src/app/api/**`
-  - 页面直接调用服务端查询层
+- 虽然已经有 `api/v1`，但 `site/` 当前仍同时承担旧页面与 BFF/API 两种职责
+- `frontendv2/` 已具备迁移基线，但还没有替换正式运行入口
 - 没有后台系统、用户体系、投稿审核流、公开写接口
 - 没有 FTS5、搜索建议、高亮片段或独立搜索接口
 - 已有最小自动化验证基线
@@ -82,17 +112,19 @@
   - 覆盖首页、`/?q=`、分类页、详情页以及未发布/不存在 slug 的可见性
 - 仍然没有浏览器交互型 E2E 自动化
 - 没有仓库内可审计的部署配置
-- `icon` 字段在类型和查询层存在，但本次检查到的首页卡片与详情页头部都没有实际渲染图标
+- 旧 `site/` 与 `frontendv2/` 之间还没有进入“逐页替换正式前端”的执行阶段
 
 ## 本次已重新验证
 
-- `npm run test`
-- `npm run test:smoke`
-- `npm run verify`
-  - 内部顺序执行了 `lint`、`typecheck`、`test`、以及页面级 `test:smoke`
-  - 本次验证不依赖仓库内现有 `site/data/powerup.db` 作为唯一前提
+- `frontendv2/npm run typecheck`
+- `frontendv2/npm run build`
 
 ## 未在本次任务中再次验证
 
+- `site/npm run lint`
+- `site/npm run typecheck`
+- `site/npm run test`
+- `site/npm run test:smoke`
+- `site/npm run verify`
 - 浏览器交互型 E2E
 - 生产部署流程

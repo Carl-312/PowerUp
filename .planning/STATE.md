@@ -4,39 +4,43 @@
 
 See: .planning/PROJECT.md
 
-**Core value:** Keep the brownfield GSD workflow minimally runnable
-**Current focus:** Phase 1 recovery
+**Core value:** Keep brownfield work forward-only and keep document boundaries stable
+**Current focus:** Phase 3 documentation governance closure
 
 ## Current Position
 
 **Milestone:** v1.0 milestone
-**Current Phase:** 1
-**Current Phase Name:** automation-validation 自动化验证基线
-**Completed Phases:** 0
+**Current Phase:** 3
+**Current Phase Name:** 文档治理持续收口
+**Completed Phases:** 2
 **Total Phases:** 4
 **Current Plan:** 0
 **Total Plans in Phase:** 0
-**Status:** Ready to plan
-**Last Activity:** 2026-04-07
-**Last Activity Description:** Restored minimum GSD structure for Phase 1
-**Progress:** 0%
+**Status:** In progress
+**Last Activity:** 2026-04-08
+**Last Activity Description:** Continued repo-wide documentation drift closure after walkthrough hard archive
+**Progress:** 75%
 
 ## Accumulated Context
 
 ### Decisions
 
 - Treat `site/` as the only application root.
-- Limit brownfield recovery changes to `.planning/`.
+- Treat `docs/**` as the current implementation description layer.
+- Treat `specs-v1/_history/**` as historical only.
+- Treat `site/README.md` as a runtime manual, not a current-state document.
+- Treat `.planning/codebase/**` as scan output, not implementation truth.
 
 ### Pending Todos
 
-None yet.
+- Keep README / docs / specs / `.planning` entry order aligned.
+- Keep PRD target language from being mistaken as current UI fact.
 
 ### Blockers/Concerns
 
-- Phase 1 has no CONTEXT, RESEARCH, or PLAN artifacts yet.
+- `.planning/**` is still a minimal execution scaffold with no detailed phase artifacts.
 
 ## Session Continuity
 
-**Stopped At:** Minimum GSD structure restored
+**Stopped At:** Documentation governance convergence pass
 **Resume file:** None

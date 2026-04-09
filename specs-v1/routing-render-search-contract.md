@@ -1,13 +1,14 @@
 # PowerUp V1 路由、渲染与搜索契约
 
-本文是 `T0-02` 的单一真源，用于冻结页面路由职责、渲染策略、数据流边界和搜索流转方式。后续 `site/` 初始化完成后，相关实现必须按本文落地，避免在 `PRD.md`、`walkthrough.md` 和源码中出现多套口径。
+本文是保留的 contract 文档，用于冻结页面路由职责、渲染策略、数据流边界和搜索流转方式。
+当前实现仍应按本文保持一致，避免在 `PRD.md`、walkthrough 历史文档和源码中出现多套口径。
 
 ---
 
 ## 1. 作用范围
 
-- 适用目录：`E:\cursorproject\PowerUp\specs-v1` 与未来的 `E:\cursorproject\PowerUp\site`。
-- 若 `PRD.md`、`walkthrough.md`、代码注释与本文冲突，以本文为准，并同步回写冲突文案。
+- 适用目录：`/home/carl/PowerUp/specs-v1` 与当前应用根 `/home/carl/PowerUp/site`。
+- 若 `PRD.md`、`./_history/` 下的 walkthrough 文档或代码注释与本文冲突，以本文为准，并同步记录到 `../docs/DRIFT-AND-SOURCES-OF-TRUTH.md`。
 - 本文冻结的是“页面职责和流转边界”，不是组件视觉设计稿；涉及路由、查询入口、页面渲染模式时，以本文为准。
 
 ---

@@ -9,7 +9,7 @@
 | `/` | 默认列表、完整搜索结果、类型/分类/排序/分页入口 | `q` `type` `category` `sort` `page` | 动态读取 `searchParams` | contract 与代码一致 |
 | `/category/[category]` | 固定分类上下文下的列表页 | `type` `sort` `page` | 动态读取 `params` + `searchParams` | contract 与代码一致 |
 | `/skill/[slug]` | 已发布条目详情页 | 无列表型查询参数要求 | `generateStaticParams()` + `revalidate = 3600` | contract 与代码一致 |
-| `/about` | 项目说明页 | 无 | 无动态参数；内容来自 Markdown 文件 | contract 与代码结构一致，本次未重新跑构建验证静态产物 |
+| `/about` | 项目说明页 | 无 | 无动态参数；内容来自 Markdown 文件 | contract 与代码结构一致；本次已通过 `verify` 链路内的 `next build` 重新验证静态产物生成 |
 
 ## 首页 `/`
 

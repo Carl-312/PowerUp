@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&amp;family=Be_Vietnam_Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "surface": "#fffbff",
+                    "surface-tint": "#78620e",
+                    "surface-dim": "#ece59e",
+                    "tertiary-fixed": "#ff928c",
+                    "on-surface": "#3c3914",
+                    "inverse-on-surface": "#a39f70",
+                    "on-tertiary-fixed": "#3a0004",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#c1242c",
+                    "inverse-surface": "#100f00",
+                    "primary-container": "#f9db7d",
+                    "surface-container": "#fcf6b9",
+                    "surface-variant": "#f1eba6",
+                    "primary-fixed": "#f9db7d",
+                    "outline": "#868256",
+                    "surface-bright": "#fffbff",
+                    "tertiary-dim": "#b01422",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#98f5c9",
+                    "on-tertiary": "#ffffff",
+                    "secondary-dim": "#006546",
+                    "tertiary-fixed-dim": "#ff7b75",
+                    "error-dim": "#b92902",
+                    "on-secondary-container": "#005e41",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#5f4c00",
+                    "surface-container-high": "#f7f0b0",
+                    "tertiary-container": "#ff928c",
+                    "error-container": "#f95630",
+                    "on-primary-fixed": "#493a00",
+                    "surface-container-highest": "#f1eba6",
+                    "on-secondary-fixed": "#004932",
+                    "on-secondary-fixed-variant": "#006949",
+                    "on-surface-variant": "#69663c",
+                    "on-error-container": "#520c00",
+                    "primary-fixed-dim": "#eacd71",
+                    "outline-variant": "#c0bb8a",
+                    "primary": "#78620e",
+                    "error": "#be2d06",
+                    "secondary-container": "#98f5c9",
+                    "on-tertiary-fixed-variant": "#790010",
+                    "on-background": "#3c3914",
+                    "on-primary-fixed-variant": "#6b5600",
+                    "on-tertiary-container": "#69000c",
+                    "surface-container-low": "#fffadf",
+                    "background": "#fffbff",
+                    "secondary-fixed-dim": "#8ae7bb",
+                    "secondary": "#007350",
+                    "primary-dim": "#6b5600",
+                    "inverse-primary": "#f9db7d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1.5rem",
+                    "lg": "2.5rem",
+                    "xl": "3.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .clay-card {
+            background: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                8px 8px 16px rgba(0, 0, 0, 0.05),
+                inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+                inset -4px -4px 8px rgba(120, 98, 14, 0.05);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .clay-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                15px 20px 30px rgba(0, 0, 0, 0.08),
+                inset 4px 4px 8px rgba(255, 255, 255, 1),
+                inset -6px -6px 12px rgba(120, 98, 14, 0.08);
+        }
+        .clay-button-primary {
+            background: linear-gradient(145deg, #78620e, #6b5600);
+            box-shadow: 
+                0 10px 20px rgba(120, 98, 14, 0.3),
+                inset 0 4px 6px rgba(255, 255, 255, 0.4),
+                inset 0 -4px 6px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .clay-button-secondary {
+            background: #f7f0b0;
+            box-shadow: 
+                0 10px 20px rgba(241, 235, 166, 0.3),
+                inset 0 4px 6px rgba(255, 255, 255, 0.8),
+                inset 0 -4px 6px rgba(120, 98, 14, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .squishy-section {
+            background: #fffadf;
+            box-shadow: inset 0 20px 40px rgba(120, 98, 14, 0.03);
+            border-top: 8px solid #f1eba6;
+        }
+        .floating-emoji {
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        .hero-title-shadow {
+            text-shadow: 4px 4px 0px rgba(120, 98, 14, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-x-hidden">
+<!-- Navigation -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl rounded-full bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl shadow-[inset_0px_4px_4px_rgba(255,255,255,1),0px_20px_40px_rgba(0,0,0,0.1)] flex justify-between items-center px-8 py-3 z-50">
+<div class="text-2xl font-black text-yellow-700 dark:text-yellow-400 font-headline tracking-tight">GameJoy</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-yellow-700 dark:text-yellow-400 border-b-4 border-yellow-400 rounded-none pb-1 font-bold font-headline" href="#">Play</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-yellow-600 transition-colors font-headline" href="#">Heroes</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-yellow-600 transition-colors font-headline" href="#">Features</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-yellow-600 transition-colors font-headline" href="#">Market</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-yellow-600" data-icon="sports_esports">sports_esports</span>
+<button class="bg-primary hover:scale-95 transition-transform duration-200 text-on-primary px-6 py-2 rounded-full font-bold shadow-lg">Get Started</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative pt-40 pb-20 md:pt-56 md:pb-32 px-6 overflow-visible">
+<div class="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
+<div class="mb-6 floating-emoji text-6xl">⭐</div>
+<h1 class="font-headline font-extrabold text-5xl md:text-8xl text-on-surface leading-tight mb-8 max-w-4xl tracking-tighter hero-title-shadow">
+            Enter the <span class="text-primary italic">Playful</span> World of Joy
+        </h1>
+<p class="text-on-surface-variant text-lg md:text-2xl max-w-2xl mb-12 font-medium">
+            Experience a tactile gaming adventure where every jump feels soft and every win feels golden. 🍄
+        </p>
+<div class="flex flex-col sm:flex-row gap-6">
+<button class="clay-button-primary scale-100 hover:scale-105 active:scale-95 transition-all text-on-primary px-12 py-5 rounded-full text-xl font-bold font-headline">
+                Get Started
+            </button>
+<button class="clay-button-secondary scale-100 hover:scale-105 active:scale-95 px-12 py-5 rounded-full text-xl font-bold font-headline text-on-primary-container transition-all">
+                View Demo
+            </button>
+</div>
+</div>
+<!-- Floating High-Fidelity Claymorphic Assets -->
+<div class="absolute inset-0 pointer-events-none select-none">
+<div class="absolute top-1/4 -left-10 w-48 h-48 md:w-72 md:h-72 opacity-90 floating-emoji" style="animation-delay: 0.5s;">
+<img alt="Clay Mushroom" class="w-full h-full drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2CId79--cVqxNk3H-oQCEURUa8orzYdgRImy2eNJBxF3F8moFztRgq6DLeB6vXqR-PBFTo3-UUuicSJjM1kD9KjFuBSXtb3-Aie0ZgQE2Z0M8IsY1lVKEHjBMczvz_kiv7Vv4Ne3AvkOEg9lL6jFsO0boUKPPUQIx3vDZ3CvvJkbyCgT9-ahJdgFIFxyc1_2L847djcRCZLMOP2TAb1VV8_deC_LJlUIvhE24om0wQnBecEvulcdPwh6eTYZJHA5zWyT_NRrLNyc"/>
+</div>
+<div class="absolute top-1/3 -right-12 w-40 h-40 md:w-64 md:h-64 opacity-90 floating-emoji" style="animation-delay: 1.2s;">
+<img alt="Gold Star" class="w-full h-full drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMfHYmFFFxbqWGMf75yeBjt3ob9Mbg3QF1pJUudys-pNrED8xa8CejwShMrmiZauULXoKGex0nMFdp7jQW1ujLMjUp2WVeBhq0TVqbY2rV5gyESx4fLNUnitDBHoB3Z4HQ6TFycI9OMoYm5nx0Bw3e5fvTr5cio3q6Eu37Q25vgyw4SwSGkpj5YHbR4Tc4zsZM6O6aa7wzb3xrjK4Lt_sV7zOY2VJ3dPo6ooP3sfQr-ZmfEGZlMrdZ5W3lJiagUu6PMA-IUgc8M-Y"/>
+</div>
+<div class="absolute bottom-10 left-1/4 w-32 h-32 opacity-80 hidden md:block floating-emoji" style="animation-delay: 2s;">
+<img alt="Clay Pipe" class="w-full h-full drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeS25slYFk3TSsQ3-K3BM4Jt9zDPoymHQlhCaWoLv1fUgRysGPDIp07NsGVQzf4gST5RXL2fOdwLusq1-jCRfLOPfs_J5qzWhBgltoPDi7rGmB-Yz6U8nDb1QJZAt66Cmz2GxejaTdt552RyatPtYtu53Z4SiSJ4sGe_uZzzaPz-9hy_-03wmH-CroQqfkAVH29MVMZDzPAks6M9qGQQWU-prQWMx5utHhjDJdDrIBWt1NSubMIt7GoE6oEVydEChH9gDkedK9mhc"/>
+</div>
+<!-- Decorative Emojis -->
+<div class="absolute top-[20%] right-[20%] text-4xl floating-emoji opacity-40" style="animation-delay: 0.8s;">🧱</div>
+<div class="absolute bottom-[20%] right-[10%] text-5xl floating-emoji opacity-40" style="animation-delay: 1.5s;">🌈</div>
+</div>
+</header>
+<!-- Features Section -->
+<section class="py-24 px-6 squishy-section rounded-t-lg md:rounded-t-xl">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20 relative">
+<span class="bg-secondary-container text-on-secondary-container px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-inner">Power Ups</span>
+<h2 class="font-headline text-4xl md:text-6xl font-extrabold mt-6 text-on-surface">Built for Fun <span class="text-secondary">🦖</span></h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Feature 1 -->
+<div class="clay-card p-10 rounded-lg flex flex-col items-center text-center">
+<div class="w-24 h-24 bg-primary-container rounded-full flex items-center justify-center mb-8 shadow-[inset_0_4px_8px_rgba(0,0,0,0.1),0_8px_16px_rgba(120,98,14,0.1)] border-4 border-white">
+<span class="material-symbols-outlined text-5xl text-on-primary-container" data-icon="monetization_on" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Golden Economy</h3>
+<p class="text-on-surface-variant">Collect shiny tokens that feel real to the touch. A marketplace driven by play. ✨</p>
+</div>
+<!-- Feature 2 -->
+<div class="clay-card p-10 rounded-lg flex flex-col items-center text-center">
+<div class="w-24 h-24 bg-secondary-container rounded-full flex items-center justify-center mb-8 shadow-[inset_0_4px_8px_rgba(0,0,0,0.1),0_8px_16px_rgba(0,115,80,0.1)] border-4 border-white">
+<span class="material-symbols-outlined text-5xl text-on-secondary-container" data-icon="local_florist" style="font-variation-settings: 'FILL' 1;">local_florist</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Power Bloom</h3>
+<p class="text-on-surface-variant">Unlock hidden abilities with the mint meadow flower. Grow your hero's potential. 🌿</p>
+</div>
+<!-- Feature 3 -->
+<div class="clay-card p-10 rounded-lg flex flex-col items-center text-center">
+<div class="w-24 h-24 bg-tertiary-container rounded-full flex items-center justify-center mb-8 shadow-[inset_0_4px_8px_rgba(0,0,0,0.1),0_8px_16px_rgba(193,36,44,0.1)] border-4 border-white">
+<span class="material-symbols-outlined text-5xl text-on-tertiary-container" data-icon="mist" style="font-variation-settings: 'FILL' 1;">mist</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Tactile Foes</h3>
+<p class="text-on-surface-variant">Encounter friendly ghosts that challenge your precision in a safe, soft world. 👻</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Gallery Section -->
+<section class="py-32 px-6 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+<div class="max-w-2xl">
+<h2 class="font-headline text-4xl md:text-6xl font-extrabold text-on-surface">Meet Your <span class="text-secondary">Heroes</span> 🦸‍♂️</h2>
+<p class="mt-6 text-xl text-on-surface-variant">Choose your companion for the next big adventure. Each hero has unique traits and a squishy personality.</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 group hover:translate-x-2 transition-transform">
+                View All Heroes
+                <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Character 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-lg bg-surface-container p-6 overflow-hidden mb-6 clay-card group-hover:bg-primary-container/30">
+<img alt="Jumper Hero" class="w-full h-full object-contain drop-shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLBl5zeyA-H17P5fbtqgXn8MadeVRq3mW_iY1hjdQYO5-fxg3cduQiRwU41W9HQ9BJtE7SSPcgKXs8Rjuz0BWz_HnatfCYT0W2LRl2z7dEewsHCOwwUFky5g6b2Rpyq3-5lXUyCzCBWS3PmCZig0iqBNGjftklNXx454YDBcKZv-IU2Udq2jtEvppGXGL1sKao8xft9fKr-KBMVUhRxfmuyFHEPI9B7j9eU4C8_Deg5sBF6l2kTmri1Ps3kObKXdCdNPNW7LPRWYw"/>
+</div>
+<div class="flex items-center justify-between px-2">
+<h4 class="font-headline font-bold text-xl">Jumper</h4>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">Legend</span>
+</div>
+</div>
+<!-- Character 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-lg bg-secondary-container p-6 overflow-hidden mb-6 clay-card group-hover:bg-secondary-container/40">
+<img alt="Moss Hero" class="w-full h-full object-contain drop-shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjtnZUwa070nlDCbr6cbLSNjjYYH4z1yOa88Q1pkpWxm_pqhTbCb7_ADd52nx73zhx06UNLZ2KhqfnEFN_xj4eOWOnEpS0hmOyubcw-FGtz-g2rFasWKxbAL6f7C2zw4we-TEeXJMBGUh6fcuo-LrkE3cDXgSstdhNQ7YRW8PxswJ6tpArFD2R08284fRQMRlfElu6mlw2Qq5-DxN0Ke0OjyTW2qwVM8QlLG6RzGYfzidqqw_Fj7z8Cls_0Q3d8V3upI5_oRdYHvI"/>
+</div>
+<div class="flex items-center justify-between px-2">
+<h4 class="font-headline font-bold text-xl">Mossy</h4>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">Common</span>
+</div>
+</div>
+<!-- Character 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-lg bg-tertiary-container p-6 overflow-hidden mb-6 clay-card group-hover:bg-tertiary-container/40">
+<img alt="Berry Hero" class="w-full h-full object-contain drop-shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxOYebCxtAgtLQxx7H9uSdSKQ6FIXf4FTfHsPcEb4sFG-8zwxEsMROPaKFIQYuF_4aenlhSXDGyBT4UpFt1VqIUsE0pO30iV84f4Y3wJSDj53kgh3SpUiReUby1Im9V4djBhPbvU_q5JPaT0SE5EPNXW1xCEWQsWVjiPQBbb3-VZs-VM41-qo6ILVYkMy-H9sSIZzC-7ryIMj-TRboAH7P2IsVr3o7m6aGTMxR_SD6Yc9Zwa0tOQ8P47Oa9DC3UMqYzTG5VEkaFaM"/>
+</div>
+<div class="flex items-center justify-between px-2">
+<h4 class="font-headline font-bold text-xl">Berry</h4>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">Rare</span>
+</div>
+</div>
+<!-- Character 4 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-lg bg-surface-container-highest p-6 overflow-hidden mb-6 clay-card group-hover:bg-surface-container-highest/60">
+<img alt="Cloud Hero" class="w-full h-full object-contain drop-shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnnGMrFn4V-fae673LG5ydCZLuWmpCLghhd5LxyXLZ9vXQjp4nTY66IYEqSUfNaExAC_bop3DxvbZhiCJLJ2BIsRGpgKq8-KSjIEnPLI27Ljzyuvq1wb3eg-vFdZ2HYWAxBPw34Bq80tVqAI8-pV-yTwdd5MbpPP5lOLoBPqTw689ZEWsqb6Mapji-9VItb2kCvWPQfmNb7Tg0xd8EHXNWhi90Onj-kkSAyBX3Q6pm1yDaxyBlqqKEO0qiSMrr0_lUVMMoJYCRr8Y"/>
+</div>
+<div class="flex items-center justify-between px-2">
+<h4 class="font-headline font-bold text-xl">Cloudy</h4>
+<span class="bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">Epic</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Call to Action -->
+<section class="mx-6 mb-24">
+<div class="max-w-7xl mx-auto bg-primary-container rounded-lg p-12 md:p-24 text-center relative overflow-hidden shadow-2xl border-4 border-white">
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-primary rounded-full opacity-20 floating-emoji" style="animation-duration: 6s;"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary rounded-full opacity-20 floating-emoji" style="animation-duration: 8s;"></div>
+<div class="relative z-10">
+<div class="mb-8 text-6xl">🎮 🌈 🚀</div>
+<h2 class="font-headline text-4xl md:text-7xl font-black text-on-primary-container mb-8 leading-tight">Ready to Jump In?</h2>
+<p class="text-on-primary-fixed-variant text-xl md:text-2xl mb-12 max-w-2xl mx-auto font-medium">Join over 1 million players exploring the most squishable world ever created.</p>
+<button class="clay-button-primary text-on-primary hover:scale-110 active:scale-95 transition-transform duration-200 px-16 py-6 rounded-full text-2xl font-bold font-headline">
+                Get Started Now
+            </button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-zinc-50 dark:bg-zinc-950 w-full rounded-t-lg mt-20 shadow-[inset_0px_10px_20px_rgba(0,0,0,0.02)]">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full max-w-7xl mx-auto gap-8">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-black text-3xl text-yellow-700 mb-2">GameJoy</span>
+<p class="text-zinc-500 font-body text-sm">© 2024 Playful Precision. All rights reserved.</p>
+</div>
+<div class="flex gap-4 md:gap-4 flex-wrap justify-center font-['Be_Vietnam_Pro'] text-sm">
+<a class="text-zinc-500 hover:text-yellow-600 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-full px-4 py-2 transition-all font-bold" href="#">Privacy</a>
+<a class="text-zinc-500 hover:text-yellow-600 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-full px-4 py-2 transition-all font-bold" href="#">Terms</a>
+<a class="text-zinc-500 hover:text-yellow-600 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-full px-4 py-2 transition-all font-bold" href="#">Discord</a>
+<a class="text-zinc-500 hover:text-yellow-600 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-full px-4 py-2 transition-all font-bold" href="#">Support</a>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-primary cursor-pointer hover:scale-110 transition-transform shadow-md border-2 border-white">
+<span class="material-symbols-outlined text-xl" data-icon="share">share</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-secondary cursor-pointer hover:scale-110 transition-transform shadow-md border-2 border-white">
+<span class="material-symbols-outlined text-xl" data-icon="hub">hub</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
