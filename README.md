@@ -1,6 +1,7 @@
 # PowerUp
 
 开放共建的 Agent 能力发现平台。PowerUp 从精选起步，向社区生长，让非技术用户零门槛探索，让好用的 AI 工具被更多人发现和分享。
+<img width="2559" height="1347" alt="image" src="https://github.com/user-attachments/assets/8356de72-aa3d-4079-8d27-e044ecb93cf7" />
 
 ## 我们想做什么
 
