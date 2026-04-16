@@ -1,100 +1,155 @@
 import Link from "next/link";
+import { ArrowRight, ExternalLink } from "lucide-react";
 
 import { CATEGORY_LABELS } from "@/lib/categories";
+import { formatUpdatedAt, getSkillFallbackIcon } from "@/lib/skill-presentation";
 import type { PublicSkillRecord } from "@/types/skill";
 import { SKILL_TYPE_LABELS } from "@/types/skill";
-
-const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
-const formatUpdatedAt = (value: number) => dateFormatter.format(new Date(value * 1000));
 
 interface SkillDetailHeaderProps {
   skill: PublicSkillRecord;
 }
 
-export const SkillDetailHeader = ({ skill }: SkillDetailHeaderProps) => (
-  <section className="rounded-[36px] border border-amber-200/80 bg-[radial-gradient(circle_at_top_right,_rgba(251,191,36,0.18),_transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.98),rgba(247,243,236,0.9))] px-6 py-8 shadow-sm sm:px-8">
-    <div className="flex flex-col gap-6">
-      <Link href="/" className="text-sm font-medium text-zinc-500 transition hover:text-zinc-950">
-        返回目录
-      </Link>
+export const SkillDetailHeader = ({ skill }: SkillDetailHeaderProps) => {
+  const fallbackIcon = getSkillFallbackIcon(skill);
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(260px,0.9fr)]">
-        <div className="space-y-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium tracking-[0.14em] text-amber-900 uppercase">
+  return (
+    <section className="powerup-detail-hero">
+      <div className="powerup-detail-hero-grid">
+        <div className="powerup-detail-hero-copy">
+          <div className="powerup-detail-back-row">
+            <Link href="/" className="powerup-button-ghost powerup-button-link">
+              返回目录
+            </Link>
+            <Link
+              href={`/category/${skill.category}`}
+              className="powerup-button-secondary powerup-button-link"
+            >
+              前往 {CATEGORY_LABELS[skill.category]}
+            </Link>
+          </div>
+
+          <div className="powerup-card-chip-row">
+            <span className="powerup-card-chip powerup-card-chip-accent">
               {SKILL_TYPE_LABELS[skill.type]}
             </span>
-            <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs text-zinc-700">
-              {CATEGORY_LABELS[skill.category]}
-            </span>
-            <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs text-zinc-500">
-              {skill.slug}
-            </span>
+            <span className="powerup-card-chip">{CATEGORY_LABELS[skill.category]}</span>
+            <span className="powerup-card-chip">{skill.slug}</span>
           </div>
 
           <div className="space-y-3">
-            <h1 className="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
-              {skill.name}
-            </h1>
-            <p className="max-w-3xl text-base leading-8 text-zinc-700">{skill.summary}</p>
+            <p className="powerup-eyebrow">条目详情</p>
+            <h1 className="powerup-page-title powerup-detail-title">{skill.name}</h1>
+            <p className="powerup-hero-lead powerup-detail-summary">{skill.summary}</p>
           </div>
 
-          {skill.tags.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {skill.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-xs text-zinc-600"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          ) : null}
+          <div className="powerup-hero-actions">
+            {skill.doc_url ? (
+              <a
+                href={skill.doc_url}
+                target="_blank"
+                rel="noreferrer"
+                className="powerup-button-primary powerup-button-link"
+              >
+                官方文档
+                <ExternalLink className="size-4" />
+              </a>
+            ) : (
+              <a href="#skill-body" className="powerup-button-primary powerup-button-link">
+                查看详细描述
+                <ArrowRight className="size-4" />
+              </a>
+            )}
+
+            {skill.github_url ? (
+              <a
+                href={skill.github_url}
+                target="_blank"
+                rel="noreferrer"
+                className="powerup-button-secondary powerup-button-link"
+              >
+                GitHub
+                <ExternalLink className="size-4" />
+              </a>
+            ) : (
+              <a href="#skill-context" className="powerup-button-secondary powerup-button-link">
+                看目录定位
+                <ArrowRight className="size-4" />
+              </a>
+            )}
+          </div>
+
+          <div className="powerup-detail-stat-grid" aria-label="条目概览">
+            <article className="powerup-stat-card powerup-stat-card-compact">
+              <span>作者</span>
+              <strong>{skill.author}</strong>
+              <p>公开资料中标注的维护方或来源组织。</p>
+            </article>
+            <article className="powerup-stat-card powerup-stat-card-compact">
+              <span>更新时间</span>
+              <strong>{formatUpdatedAt(skill.updated_at, "long")}</strong>
+              <p>目录最近一次更新这条信息的时间。</p>
+            </article>
+            <article className="powerup-stat-card powerup-stat-card-compact">
+              <span>{skill.license ? "许可" : "平台"}</span>
+              <strong>
+                {skill.license ?? `${Math.max(skill.supported_platforms.length, 1)} 项公开线索`}
+              </strong>
+              <p>
+                {skill.license
+                  ? "如果开源协议已公开，这里会直接展示出来。"
+                  : "可以结合平台、文档和分类信息快速判断它是否适合继续了解。"}
+              </p>
+            </article>
+          </div>
         </div>
 
-        <aside className="rounded-[28px] border border-white/80 bg-white/80 p-5 shadow-sm backdrop-blur">
-          <div className="space-y-4">
-            <h2 className="text-base font-semibold text-zinc-950">基础信息</h2>
-            <dl className="grid gap-3 text-sm text-zinc-700">
-              <div className="grid gap-1">
-                <dt className="text-zinc-500">作者 / 维护组织</dt>
-                <dd className="font-medium text-zinc-950">{skill.author}</dd>
-              </div>
-              <div className="grid gap-1">
-                <dt className="text-zinc-500">最后更新</dt>
-                <dd className="font-medium text-zinc-950">{formatUpdatedAt(skill.updated_at)}</dd>
-              </div>
-              {skill.license ? (
-                <div className="grid gap-1">
-                  <dt className="text-zinc-500">开源协议</dt>
-                  <dd className="font-medium text-zinc-950">{skill.license}</dd>
-                </div>
-              ) : null}
-              {skill.supported_platforms.length > 0 ? (
-                <div className="grid gap-2">
-                  <dt className="text-zinc-500">支持平台</dt>
-                  <dd className="flex flex-wrap gap-2">
-                    {skill.supported_platforms.map((platform) => (
-                      <span
-                        key={platform}
-                        className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700"
-                      >
-                        {platform}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              ) : null}
-            </dl>
+        <aside className="powerup-detail-stage">
+          <div className="powerup-detail-stage-visual" aria-hidden="true">
+            <span className="powerup-card-visual-token powerup-card-visual-token-a">⭐</span>
+            <span className="powerup-card-visual-token powerup-card-visual-token-b">🪙</span>
+            <div className="powerup-detail-stage-frame">
+              {skill.icon && !skill.icon.startsWith("http") ? (
+                <span className="powerup-detail-stage-emoji">{skill.icon}</span>
+              ) : skill.icon ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={skill.icon}
+                  alt=""
+                  className="powerup-detail-stage-image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span className="powerup-detail-stage-emoji">{fallbackIcon}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <span className="powerup-detail-stage-badge">Wonder 2.5D</span>
+            <h2>先看清定位，再决定要不要深入了解</h2>
+            <p>
+              先看用途和分类，再决定去读文档、看仓库，还是继续浏览同类内容，会更容易形成判断。
+            </p>
+          </div>
+
+          <div className="powerup-detail-stage-list">
+            <div>
+              <span>世界分区</span>
+              <p>{CATEGORY_LABELS[skill.category]}</p>
+            </div>
+            <div>
+              <span>公开入口</span>
+              <p>{skill.doc_url ? "已提供官方文档，可继续深入了解功能与使用方式。" : "可以先读正文和基础信息，再决定是否进一步查找资料。"}</p>
+            </div>
+            <div>
+              <span>阅读路线</span>
+              <p>先看描述，再看使用信息，最后从侧栏选择外部链接或继续浏览同类内容。</p>
+            </div>
           </div>
         </aside>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

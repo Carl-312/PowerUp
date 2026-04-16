@@ -1,16 +1,14 @@
 # Data And Content
 
-本文说明当前数据模型、公开字段边界、治理字段、枚举、分类，以及 seed 数据在当前实现中的作用范围。
+本文说明当前数据模型、公开字段边界、内容来源和 seed 基线。
 
 ## 核心表
 
-当前唯一需要关注的业务表是 `skills`。
+当前唯一业务表是 `skills`。
 
-## 字段边界
+## 前台公开字段
 
-### 前台公开字段
-
-这些字段由 `site/src/types/skill.ts` 的 `PUBLIC_SKILL_FIELDS` 明确列出，并由查询层映射给前台页面：
+这些字段会进入页面或只读 API：
 
 - `name`
 - `slug`
@@ -29,14 +27,18 @@
 - `supported_platforms`
 - `updated_at`
 
-说明：
+### 当前实际展示方式
 
-- `icon` 仍属于公开字段边界，但本次检查到的列表页和详情页尚未实际渲染图标 UI。
-- 详情页外链区当前只实际消费 `doc_url` 和 `github_url`。
+- 列表卡片会尝试渲染 `icon`
+- 详情页头部也会尝试渲染 `icon`
+- 如果 `icon` 为空，会回退到类型 / 分类对应的 fallback 图标
+- 外部链接当前只公开：
+  - `doc_url`
+  - `github_url`
 
-### 内部治理字段
+## 内部治理字段
 
-这些字段由 `INTERNAL_SKILL_FIELDS` 定义，不应进入前台目录列表或详情公开视图：
+这些字段仍属于内部治理层，不进入前台公开视图：
 
 - `source_url`
 - `source_kind`
@@ -50,11 +52,6 @@
 
 - `skill`
 - `mcp_server`
-
-前台展示标签固定映射为：
-
-- `skill` -> `Skill`
-- `mcp_server` -> `MCP`
 
 ### review_status
 
@@ -70,9 +67,9 @@
 - `vendor_site`
 - `community_directory`
 
-## 分类枚举
+### 分类枚举
 
-当前一级分类 slug 固定为十个值：
+当前一级分类固定为 10 个 slug：
 
 - `developer-tools`
 - `data-analytics`
@@ -85,57 +82,48 @@
 - `files-storage`
 - `other`
 
-当前 seed 基线实际覆盖其中 8 个分类，未覆盖：
+当前 seed 实际覆盖 8 个分类，未覆盖：
 
 - `business-finance`
 - `security-ops`
 
 ## 可见性规则
 
-`published` 是当前前台可见性的硬边界。
+`published` 是当前页面和只读 API 的统一公开边界：
 
-- 列表：`listSkills()` 只查询 `review_status = "published"`
-- 详情：`getSkillBySlug()` 只查询 `published`
+- 列表：`listSkills()` 只查 `published`
+- 详情：`getSkillBySlug()` 只查 `published`
 - 分类计数：`getCategoryCounts()` 只统计 `published`
 
-这意味着：
+因此 `draft`、`reviewed`、`archived` 即使在库中存在，也不会进入首页、分类页、详情页或公开 API 结果。
 
-- `draft`
-- `reviewed`
-- `archived`
+## JSON 文本字段
 
-即使存在于库中，也不会进入首页、分类页、详情页或搜索结果。
-
-## JSON 文本数组
-
-以下两个字段在 SQLite 中不是原生数组，而是文本列：
+以下字段在 SQLite 中以文本保存：
 
 - `tags`
 - `supported_platforms`
 
 当前实现方式：
 
-- 写入时：`seed.ts` 用 `JSON.stringify()` 序列化
-- 读取时：`queries/skills.ts` 用 `parseJsonTextArray()` 解码
-- 解码失败时：回退为空数组，而不是抛出前台错误
+- seed 写入时使用 `JSON.stringify()`
+- 查询读取时在 `queries/skills.ts` 中解析回数组
+- 解析失败时回退为空数组，不直接把错误抛给前台
 
-## Seed 边界
+## Seed 与内容来源
 
-### 当前 seed 文件承担什么
+- `site/src/db/seed-data.ts`：当前样本内容基线
+- `site/src/db/seed.ts`：按 `slug` upsert 到 SQLite
+- `site/src/content/about.md`：关于页与 `/api/v1/content/about` 的正文来源
 
-- `site/src/db/seed-data.ts` 是当前样本内容基线
-- `site/src/db/seed.ts` 负责把样本数据写入 SQLite，并按 `slug` 做 upsert
-- 未显式给出 `review_status` 的 seed 记录，会在 seed 归一化时默认落成 `published`
+2026-04-11 本次核对确认：
 
-### 当前可核对的事实
+- seed 记录数：18
+- 当前 seed 覆盖分类数：8
+- `npm run test:smoke` 中的 `db:seed` 可正常写入这些记录
 
-- seed 文件定义了 18 条样本记录
-- 类型同时覆盖 `skill` 与 `mcp_server`
-- 按当前 seed 归一化规则，这 18 条样本默认都会进入 `published`
-- 当前仓库不要求预先存在 `site/data/powerup.db`；如未设置 `DATABASE_URL`，运行时和数据库脚本会按默认路径创建它
+## 当前边界
 
-### 不要误判的边界
-
-- `site/data/powerup.db` 是本地运行产物，不是版本化内容真源
-- 持久化字段边界和样本内容基线的真源仍在 `site/src/db/schema.ts` 与 `site/src/db/seed-data.ts`
-- 当前没有 CMS、后台编辑器或在线内容写入流程
+- `site/data/powerup.db` 是运行产物，不是版本化真源
+- 当前没有 CMS、后台编辑器或在线写入流程
+- 内容真源仍是 `schema.ts`、`seed-data.ts` 和 `content/about.md`

@@ -220,7 +220,7 @@ const expectExcludes = (html: string, value: string, message: string) => {
 const runAssertions = async (baseUrl: string) => {
   const home = await fetchPage(baseUrl, "/");
   assert.equal(home.response.status, 200, "Home page should render successfully.");
-  expectIncludes(home.html, "PowerUp V1 MVP", "Home page should render the hero section.");
+  expectIncludes(home.html, "发现好用能力", "Home page should render the hero section.");
   expectIncludes(home.html, "Everything MCP Server", "Home page should show published results.");
   expectExcludes(home.html, "Smoke Hidden Draft", "Home page must not expose draft entries.");
 
@@ -236,7 +236,7 @@ const runAssertions = async (baseUrl: string) => {
     "everything",
     "Search query should remain on the home route.",
   );
-  expectIncludes(search.html, "当前搜索词", "Home search should render the active query state.");
+  expectIncludes(search.html, "搜索词", "Home search should render the active query state.");
   expectIncludes(search.html, "Everything MCP Server", "Search should keep matching published entries visible.");
 
   const category = await fetchPage(
@@ -246,7 +246,7 @@ const runAssertions = async (baseUrl: string) => {
   assert.equal(category.response.status, 200, "Category page should render successfully.");
   expectIncludes(
     category.html,
-    "Locked Category Context",
+    "分类浏览",
     "Category page should render the locked-category context.",
   );
   expectIncludes(

@@ -52,3 +52,21 @@
 - 默认不修改 `site/**`、`specs-v1/**`、schema、seed、package 配置
 - 如后续任务需要动代码，必须建立在当前 contract 不被误写坏的前提下
 - 测试、CI、部署增强只能 forward-only 追加，不能伪造“历史已完成”
+
+## 7. Phase 5 Feature Requirements
+
+- **SHARE-01**：已发布的 `skill` 与 `mcp_server` 详情页都要提供统一的分享入口，且入口落在当前 `site/` 详情体验内部，不新增后台、账号或写接口。
+- **SHARE-02**：分享文案至少包含名称、类型、分类、简短介绍，以及按明确优先级解析出的单个最佳来源链接。
+- **SHARE-03**：分享图片必须基于当前条目动态生成，不能依赖静态写死图片。
+- **SHARE-04**：方案必须明确区分服务端图片生成与客户端复制/下载触发，并覆盖移动端行为、加载态、失败态和缺失字段降级。
+- **SHARE-05**：方案必须补充验证与文档，覆盖分享图产物、复制文案结果、来源链接回退规则和新只读路由/页面行为。
+
+## 8. Phase Traceability
+
+| Requirement | Phase | Status | Notes |
+| --- | --- | --- | --- |
+| SHARE-01 | Phase 5 | Planned | 详情页入口与适用范围 |
+| SHARE-02 | Phase 5 | Planned | 分享文案字段与来源链接规则 |
+| SHARE-03 | Phase 5 | Planned | 服务端动态分享图 |
+| SHARE-04 | Phase 5 | Planned | 客户端下载/复制、移动端与失败态 |
+| SHARE-05 | Phase 5 | Planned | 测试、smoke、文档更新 |

@@ -31,6 +31,10 @@ See: .planning/PROJECT.md
 - Treat `site/README.md` as a runtime manual, not a current-state document.
 - Treat `.planning/codebase/**` as scan output, not implementation truth.
 
+### Roadmap Evolution
+
+- Phase 5 added: 详情页一键分享能力（图片与文本）
+
 ### Pending Todos
 
 - Keep README / docs / specs / `.planning` entry order aligned.

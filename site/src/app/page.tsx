@@ -3,12 +3,14 @@ import Link from "next/link";
 
 import { SiteSearchForm } from "@/components/site-search-form";
 import { SkillDirectory } from "@/components/skill-directory";
+import { CATEGORY_LABELS } from "@/lib/categories";
 import { getCategoryCounts, listSkills } from "@/lib/queries/skills";
 import { parseHomeListQuery } from "@/lib/validation";
+import { SKILL_TYPE_LABELS } from "@/types/skill";
 
 export const metadata: Metadata = {
-  title: "已发布 Skill 与 MCP 目录",
-  description: "浏览 PowerUp V1 已发布的 Skill 与 MCP Server，支持分类、类型、排序、分页与基础关键词搜索。",
+  title: "Skill 与 MCP 目录",
+  description: "浏览 PowerUp 收录的 Skill 与 MCP Server，按分类、类型和关键词快速找到值得继续了解的工具。",
 };
 
 interface HomePageProps {
@@ -20,95 +22,156 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const result = listSkills(filters);
   const categoryCounts = getCategoryCounts().filter((item) => item.total > 0);
   const totalPublished = categoryCounts.reduce((sum, item) => sum + item.total, 0);
+  const featuredCategories = [...categoryCounts]
+    .sort((left, right) => right.total - left.total)
+    .slice(0, 4);
+  const featuredEntry = featuredCategories[0] ?? null;
+  const heroSummaryItems = [
+    filters.q ? `关键词 · ${filters.q}` : null,
+    filters.type ? `类型 · ${SKILL_TYPE_LABELS[filters.type]}` : "类型 · 全部类型",
+    filters.category ? `分类 · ${CATEGORY_LABELS[filters.category]}` : null,
+    `结果 · ${result.totalItems} 条`,
+  ].filter(Boolean) as string[];
 
   return (
-    <div className="flex flex-col gap-8">
-      <section className="relative overflow-hidden rounded-[36px] border border-amber-200/70 bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.18),_transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.98),rgba(247,243,236,0.92))] px-6 py-8 shadow-sm sm:px-8 sm:py-10">
-        <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-amber-100/60 blur-3xl" />
-        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.95fr)] lg:items-start">
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium tracking-[0.16em] text-amber-900 uppercase">
-                PowerUp V1 MVP
-              </span>
-              <div className="space-y-4">
-                <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">
-                  用最轻的前端壳层，把已发布的 Skill 和 MCP Server 变成可搜索目录。
-                </h1>
-                <p className="max-w-2xl text-base leading-8 text-zinc-700">
-                  首页承载完整结果，顶部与 Hero 搜索统一提交到首页，页面直接调用服务端查询层，不再绕内部
-                  HTTP API。
-                </p>
-              </div>
+    <div className="flex flex-col gap-5 md:gap-7">
+      <section className="powerup-poster">
+        <div className="powerup-poster-grid">
+          <div className="powerup-hero-copy">
+            <div className="powerup-kicker-row">
+              <span className="powerup-kicker">PowerUp</span>
+              <span className="powerup-kicker powerup-kicker-soft">Wonder Directory</span>
+            </div>
+            <p className="powerup-eyebrow">发现好用能力</p>
+            <h1 className="powerup-hero-title">
+              开放共建的 Agent 能力发现平台。PowerUp 从精选起步，向社区生长
+              {" "}
+              — 让非技术用户零门槛探索，让好用的AI工具被更多人发现和分享。
+            </h1>
+            <p className="powerup-hero-lead">
+              从首页先看方向，再按分类、类型和关键词逐步缩小范围。无论你是在找写作、开发、检索还是自动化能力，都能更快筛到合适选项。
+            </p>
+
+            <div className="powerup-hero-actions">
+              <Link href="#directory" className="powerup-button-primary powerup-button-link">
+                开始浏览
+              </Link>
+              <Link href="/about" className="powerup-button-secondary powerup-button-link">
+                了解 PowerUp
+              </Link>
             </div>
 
             <SiteSearchForm
               inputId="home-hero-search"
               action="/"
               defaultValue={filters.q}
-              buttonLabel="搜索目录"
-              placeholder="搜索名称、摘要、描述或标签"
-              className="max-w-2xl"
+              buttonLabel="立即搜索"
+              placeholder="搜索名称、用途、标签或平台"
+              variant="hero"
+              className="max-w-3xl"
             />
 
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-3xl border border-white/70 bg-white/75 px-4 py-4 shadow-sm">
-                <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">Published</p>
-                <p className="mt-2 text-3xl font-semibold text-zinc-950">{totalPublished}</p>
-                <p className="mt-1 text-sm text-zinc-600">当前已发布条目</p>
-              </div>
-              <div className="rounded-3xl border border-white/70 bg-white/75 px-4 py-4 shadow-sm">
-                <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">Categories</p>
-                <p className="mt-2 text-3xl font-semibold text-zinc-950">{categoryCounts.length}</p>
-                <p className="mt-1 text-sm text-zinc-600">覆盖的有效分类</p>
-              </div>
-              <div className="rounded-3xl border border-white/70 bg-white/75 px-4 py-4 shadow-sm">
-                <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">Results</p>
-                <p className="mt-2 text-3xl font-semibold text-zinc-950">{result.totalItems}</p>
-                <p className="mt-1 text-sm text-zinc-600">当前筛选结果数</p>
-              </div>
+            <div className="powerup-stat-grid" aria-label="目录统计概览">
+              <article className="powerup-stat-card">
+                <span>Published</span>
+                <strong>{totalPublished}</strong>
+                <p>现在可以直接浏览的收录条目。</p>
+              </article>
+              <article className="powerup-stat-card">
+                <span>Worlds</span>
+                <strong>{categoryCounts.length}</strong>
+                <p>已经整理好的主题分类。</p>
+              </article>
+              <article className="powerup-stat-card">
+                <span>Visible</span>
+                <strong>{result.totalItems}</strong>
+                <p>这次筛选下可继续查看的结果。</p>
+              </article>
+            </div>
+
+            <div className="powerup-pill-row">
+              {heroSummaryItems.map((item) => (
+                <span key={item} className="powerup-summary-pill">
+                  {item}
+                </span>
+              ))}
             </div>
 
             {filters.q ? (
               <p className="text-sm text-zinc-600">
-                当前搜索词：
-                <span className="rounded-full bg-zinc-950 px-2.5 py-1 text-xs font-medium text-white">
+                搜索词：
+                <span className="ml-2 inline-flex rounded-full bg-zinc-950 px-2.5 py-1 text-xs font-medium text-white">
                   {filters.q}
                 </span>
               </p>
             ) : null}
           </div>
 
-          <aside className="rounded-[32px] border border-zinc-200/70 bg-white/80 p-5 shadow-sm backdrop-blur">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-zinc-500">分类入口</p>
-              <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">
-                直接进入固定分类上下文
-              </h2>
-              <p className="text-sm leading-7 text-zinc-600">
-                分类页会复用首页的列表、筛选、排序和分页体验，但分类由路径锁定，不在页内切换。
+          <aside className="powerup-world-spotlight">
+            <div className="powerup-world-spotlight-header">
+              <p className="powerup-eyebrow">浏览方式</p>
+              <h2>先确定方向，再挑一条最适合你的路径</h2>
+              <p>
+                如果你还不确定从哪里开始，可以先搜索，也可以先进入分类。先定范围，再看结果，会比漫无目的地翻更省时间。
               </p>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {categoryCounts.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/category/${item.slug}`}
-                  className="group flex items-center justify-between rounded-2xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 transition hover:border-amber-300 hover:bg-white"
-                >
-                  <span className="text-sm font-medium text-zinc-800">{item.label}</span>
-                  <span className="rounded-full bg-white px-2.5 py-1 text-xs text-zinc-500 shadow-sm transition group-hover:text-zinc-800">
-                    {item.total}
-                  </span>
-                </Link>
-              ))}
+            <div className="powerup-world-spotlight-steps">
+              <article className="powerup-world-step">
+                <span>先搜索</span>
+                <p>先用名称、用途、标签或平台快速缩小范围。</p>
+              </article>
+              <article className="powerup-world-step">
+                <span>再选分类</span>
+                <p>
+                  按你最关心的方向进入对应分区，集中浏览同一主题下的条目。
+                </p>
+              </article>
+              <article className="powerup-world-step">
+                <span>最后细筛</span>
+                <p>结合类型、排序和分页继续收窄，把候选项一步步筛到更贴近当前需求。</p>
+              </article>
             </div>
+
+            {featuredEntry ? (
+              <div className="powerup-world-spotlight-footer">
+                <p className="powerup-world-spotlight-footnote">
+                  现在内容最丰富的分类是 <strong>{featuredEntry.label}</strong>，已经收录{" "}
+                  <strong>{featuredEntry.total}</strong> 条内容。
+                </p>
+                <Link
+                  href={`/category/${featuredEntry.slug}`}
+                  className="powerup-button-secondary powerup-button-link"
+                >
+                  去 {featuredEntry.label} 看看
+                </Link>
+              </div>
+            ) : null}
           </aside>
         </div>
       </section>
 
-      <SkillDirectory pathname="/" result={result} allowCategoryFilter />
+      <section className="powerup-terrain-strip">
+        <div className="space-y-3">
+          <p className="powerup-eyebrow">热门分类</p>
+          <h2 className="powerup-section-title">先从内容更充实的方向开始逛</h2>
+          <p className="powerup-section-copy">
+            这些分类通常更容易帮助你快速建立判断。先进入一个主题，再在结果里继续细筛，会更容易找到真正想要的能力。
+          </p>
+        </div>
+
+        <div className="powerup-world-chip-grid">
+          {featuredCategories.map((item) => (
+            <Link key={item.slug} href={`/category/${item.slug}`} className="powerup-world-chip">
+              <span>{item.label}</span>
+              <strong>{item.total}</strong>
+              <small>已收录条目</small>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <SkillDirectory pathname="/" result={result} allowCategoryFilter variant="home" />
     </div>
   );
 }

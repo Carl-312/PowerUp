@@ -1,38 +1,40 @@
 # PowerUp Site
 
-`site/` 是 PowerUp 当前的 Next.js 运行根。
-这个 README 只负责本地运行、验证和目录提示，不再承担项目完成度说明或当前实现真源职责。
+`site/` 是 PowerUp 当前实际运行根。这个 README 只记录运行方式、验证命令、数据路径和当前边界，不承担产品进度说明职责。
 
-## What Lives Here
+## 当前包含什么
 
-- Next.js App Router 目录站
-- SQLite + Drizzle 数据层
-- 当前公开路由：
+- Next.js App Router 页面：
   - `/`
   - `/category/[category]`
   - `/skill/[slug]`
   - `/about`
-- 当前服务端查询层：`src/lib/queries/skills.ts`
-- 当前 URL 参数归一化层：`src/lib/validation.ts`
-- 当前公开 API：`src/app/api/v1/**`
+- 只读 API：
+  - `GET /api/v1/skills`
+  - `GET /api/v1/skills/[slug]`
+  - `GET /api/v1/categories`
+  - `GET /api/v1/content/about`
+- SQLite + Drizzle 数据层
+- 基于 `node:test` 的单元测试和真实构建 smoke 测试
 
-## Read Before Editing
+## 先看这些
 
-- 仓库级上下文：[`../AGENTS.md`](../AGENTS.md)
+- 仓库级说明：[`../README.md`](../README.md)
 - 当前实现文档入口：[`../docs/README.md`](../docs/README.md)
-- 当前架构说明：[`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)
+- 当前系统状态：[`../docs/CURRENT-STATE.md`](../docs/CURRENT-STATE.md)
 - 当前开发方式：[`../docs/DEVELOPMENT.md`](../docs/DEVELOPMENT.md)
-- 当前漂移登记：[`../docs/DRIFT-AND-SOURCES-OF-TRUTH.md`](../docs/DRIFT-AND-SOURCES-OF-TRUTH.md)
+- 漂移与真源：[`../docs/DRIFT-AND-SOURCES-OF-TRUTH.md`](../docs/DRIFT-AND-SOURCES-OF-TRUTH.md)
 
-## Local Commands
+## 本地命令
 
 ```bash
 npm install
 npm run dev
+npm run dev:clean
 npm run lint
+npm run typecheck
 npm run test
 npm run test:smoke
-npm run typecheck
 npm run verify
 npm run build
 npm run db:generate
@@ -41,30 +43,38 @@ npm run db:seed
 npm run db:studio
 ```
 
-## Database Notes
+### 开发启动行为
 
-- Default database path: `site/data/powerup.db`
-- If the directory or file is missing, the app and DB scripts create it on first use.
-- Override with `DATABASE_URL` if needed.
-- `npm run db:seed` is safe to repeat and updates rows by `slug`.
-- `npm run db:push` 当前实际执行的是 `drizzle-kit push --force`，只适合本地开发环境。
+- `npm run dev` 会先运行 `scripts/dev-preflight.ts`
+- 预检会清理当前项目残留的 `next dev` 进程和 `.next/dev/lock`
+- `npm run dev:clean` 只执行预检清理，不启动开发服务器
+- 预检只会自动终止当前项目相关的 Next 开发进程；其他占用同端口的非本项目进程只会告警，不会强杀
 
-## Verification
+## 数据库说明
 
-- `npm run verify` 是当前仓库内统一的本地验证入口
-- 当前 CI 也会在 `site/` 目录执行 `npm run verify`
-- 页面级 smoke 覆盖当前公开页面和 404 可见性基线
-- 本次还把 `/api/v1/**` 纳入 smoke 基线，供 `frontendv2/` 消费
+- 默认数据库路径：`site/data/powerup.db`
+- 如果未设置 `DATABASE_URL`：
+  - `npm run dev` 会在默认本地库缺 schema 时自动执行 `db:push`
+  - 默认本地库已建表但为空时会自动执行 `db:seed`
+- 如果显式设置了 `DATABASE_URL`：
+  - `npm run dev` 不会替你自动初始化这套库
+  - 缺少 `skills` 表时会提示先手动运行 `npm run db:push`
+- `npm run db:seed` 按 `slug` upsert，可重复执行
+- `npm run db:push` 当前实际执行 `drizzle-kit push --force`，只适合本地开发环境
 
-## Frontend Split
+## 验证命令
 
-- `site/` 仍保留当前 Next.js 页面
-- 新的独立前端重构工作区位于 `../frontendv2/`
-- 前后端共享 taxonomy 与 API contract 位于 `../shared/`
-- 如果你要做完全前端重构，优先看 `../frontendv2/README.md` 和 `../docs/FRONTEND-V2-SEPARATION.md`
+- `npm run lint`：ESLint
+- `npm run typecheck`：TypeScript 无输出检查
+- `npm run test`：`validation.ts` 与 `queries/skills.ts` 的逻辑测试
+- `npm run test:smoke`：临时 SQLite + `db:push` + `db:seed` + `next build` + 本地生产模式 smoke
+- `npm run verify`：串行执行 `lint`、`typecheck`、`test`、`test:smoke`
 
-## Search Boundary
+2026-04-11 本次核对中，`npm run lint`、`npm run typecheck`、`npm run test`、`npm run test:smoke` 已重新执行并通过。
 
-- 当前搜索基线是首页 `/?q=` 参数驱动的普通字段匹配
-- 当前没有 FTS5、搜索建议、高亮片段或公开搜索 API
-- 如果需要了解这些边界为什么存在，优先看 `../docs/**`、`../specs-v1/` 的 contract 文档，以及 `../specs-v1/_history/` 的历史文档，而不是把本 README 当成产品进度文档
+## 当前边界
+
+- 前台和只读 API 只暴露已发布条目
+- 搜索仍是基础字段匹配，不含 FTS5、搜索建议或高亮片段
+- 没有后台、账号体系、公开写接口或投稿审核流
+- `site/` 仍同时承担页面层和只读 API 提供方职责

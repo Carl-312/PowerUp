@@ -15,9 +15,9 @@ export const seedSkills: SkillSeedRecord[] = [
     slug: "everything-mcp",
     type: "mcp_server",
     summary:
-      "Official reference server that exposes prompts, resources, and tools in one package.",
+      "Official MCP server that brings prompts, resources, and tools together in one package.",
     description:
-      "The `everything` server is a compact reference implementation for exercising multiple Model Context Protocol capabilities in one target. It is useful when validating a client or demo environment before wiring in more specialized servers.",
+      "The `everything` server gathers several core Model Context Protocol capabilities into one place, making it a practical starting point when you want to understand how prompts, resources, and tools work together before moving on to more specialized servers.",
     category: "other",
     tags: ["reference", "testing", "prompts", "resources"],
     author: "Model Context Protocol",

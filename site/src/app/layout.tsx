@@ -1,17 +1,36 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Link from "next/link";
+import { Suspense } from "react";
 
+import { SiteNav } from "@/components/site-nav";
 import { SiteSearchForm } from "@/components/site-search-form";
 
 import "./globals.css";
+
+const smileySans = localFont({
+  src: "./fonts/SmileySans-Oblique.ttf.woff2",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+  variable: "--font-smiley-sans",
+});
 
 export const metadata: Metadata = {
   title: {
     default: "PowerUp",
     template: "%s | PowerUp",
   },
-  description: "轻量浏览已发布 AI Skills 与 MCP Server 的目录站首版。",
+  description: "浏览值得继续了解的 AI Skills 与 MCP Server，快速找到适合自己工作流的能力。",
 };
+
+const navFallbackItems = [
+  { href: "/", label: "首页" },
+  { href: "/category/developer-tools", label: "世界分区" },
+  { href: "/?type=skill", label: "Skill" },
+  { href: "/?type=mcp_server", label: "MCP" },
+  { href: "/about", label: "关于" },
+] as const;
 
 export default function RootLayout({
   children,
@@ -19,110 +38,91 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="h-full antialiased">
-      <body className="min-h-full bg-[linear-gradient(180deg,#f5f1e8_0%,#fbfaf7_22%,#ffffff_100%)] text-zinc-950">
-        <div className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-20 border-b border-zinc-200/80 bg-white/85 backdrop-blur">
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-6">
-                <div className="space-y-1">
-                  <Link href="/" className="text-2xl font-semibold tracking-tight text-zinc-950">
-                    PowerUp
-                  </Link>
-                  <p className="text-sm text-zinc-600">
-                    已发布 Skill 与 MCP Server 的轻量目录
-                  </p>
-                </div>
-                <nav className="flex flex-wrap gap-2 text-sm text-zinc-600">
-                  <Link
-                    href="/"
-                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 transition hover:border-amber-300 hover:text-zinc-950"
-                  >
-                    首页
-                  </Link>
-                  <Link
-                    href="/?type=skill"
-                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 transition hover:border-amber-300 hover:text-zinc-950"
-                  >
-                    Skill
-                  </Link>
-                  <Link
-                    href="/?type=mcp_server"
-                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 transition hover:border-amber-300 hover:text-zinc-950"
-                  >
-                    MCP
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 transition hover:border-amber-300 hover:text-zinc-950"
-                  >
-                    关于
-                  </Link>
-                </nav>
+    <html lang="zh-CN" className={`${smileySans.variable} h-full antialiased`}>
+      <body className="min-h-full">
+        <div className="powerup-site">
+          <header className="site-shell-header">
+            <div className="site-shell-header-inner">
+              <div className="site-brand-block">
+                <Link href="/" className="site-brand-mark">
+                  <span className="site-brand-orb" aria-hidden="true">
+                    ⭐
+                  </span>
+                  <span className="site-brand-lockup">
+                    <strong>PowerUp</strong>
+                    <small>Wonder Directory</small>
+                  </span>
+                </Link>
+                <p className="site-brand-copy">
+                  给你的 AI Agent 吃个蘑菇 🍄 — 发现、选择、接入，一站搞定 Agent 能力扩展。
+                </p>
               </div>
-              <div className="w-full lg:max-w-md">
+
+              <Suspense
+                fallback={(
+                  <nav className="site-nav-pills" aria-label="主导航">
+                    {navFallbackItems.map((item) => (
+                      <Link key={item.href} href={item.href} className="site-nav-pill">
+                        {item.label}
+                      </Link>
+                    ))}
+                  </nav>
+                )}
+              >
+                <SiteNav />
+              </Suspense>
+
+              <div className="site-shell-search">
                 <SiteSearchForm
                   inputId="site-header-search"
                   compact
                   action="/"
                   buttonLabel="搜索"
-                  placeholder="统一提交到首页搜索"
+                  placeholder="搜索名称、用途或标签"
                 />
               </div>
             </div>
           </header>
 
-          <main className="flex-1">
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 py-10 sm:px-6 lg:px-8">
-              {children}
-            </div>
+          <main className="site-shell-main">
+            <div className="site-shell-main-inner">{children}</div>
           </main>
 
-          <footer className="border-t border-zinc-200 bg-white/75">
-            <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 text-sm text-zinc-600 sm:px-6 lg:grid-cols-3 lg:px-8">
-              <div className="space-y-3">
-                <h2 className="text-base font-semibold text-zinc-950">PowerUp V1</h2>
-                <p className="leading-7">
-                  当前首版只聚焦浏览、筛选、排序和基础搜索，所有页面直接走服务端查询层。
+          <footer className="site-shell-footer">
+            <div className="site-shell-footer-inner">
+              <section className="site-footer-section">
+                <h2 className="site-footer-title">关于目录</h2>
+                <p className="site-footer-copy">
+                  PowerUp 持续整理公开可查的 Skill 与 MCP Server，帮助你更快找到值得收藏、测试或接入的能力。
                 </p>
-              </div>
-              <div className="space-y-3">
-                <h2 className="text-base font-semibold text-zinc-950">快速入口</h2>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/" className="rounded-full bg-zinc-100 px-3 py-1.5 transition hover:bg-zinc-200">
-                    全部目录
-                  </Link>
-                  <Link
-                    href="/?sort=name_asc"
-                    className="rounded-full bg-zinc-100 px-3 py-1.5 transition hover:bg-zinc-200"
-                  >
-                    按名称浏览
-                  </Link>
-                  <Link
-                    href="/?type=mcp_server"
-                    className="rounded-full bg-zinc-100 px-3 py-1.5 transition hover:bg-zinc-200"
-                  >
-                    只看 MCP
-                  </Link>
-                  <Link href="/about" className="rounded-full bg-zinc-100 px-3 py-1.5 transition hover:bg-zinc-200">
-                    关于项目
-                  </Link>
+                <div className="site-footer-badge-row" aria-label="目录特点">
+                  <span className="site-footer-badge">分类浏览</span>
+                  <span className="site-footer-badge">关键词搜索</span>
                 </div>
-              </div>
-              <div className="space-y-3">
-                <h2 className="text-base font-semibold text-zinc-950">当前边界</h2>
-                <p className="leading-7">
-                  当前已提供面向独立前端的
-                  <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-medium text-zinc-950">
-                    /api/v1
-                  </code>
-                  读取接口；暂不包含即时搜索建议、FTS5、部署硬化和深色模式。统一搜索表单始终回到
-                  <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-medium text-zinc-950">
-                    /?q=
-                  </code>
-                  结果态。
+              </section>
+
+              <section className="site-footer-section">
+                <h2 className="site-footer-title">快速入口</h2>
+                <div className="site-footer-links">
+                  <Link href="/">全部目录</Link>
+                  <Link href="/category/developer-tools">世界分区</Link>
+                  <Link href="/?type=skill">只看 Skill</Link>
+                  <Link href="/?type=mcp_server">只看 MCP</Link>
+                  <Link href="/about">关于项目</Link>
+                </div>
+              </section>
+
+              <section className="site-footer-section">
+                <h2 className="site-footer-title">你可以做什么</h2>
+                <p className="site-footer-copy">
+                  从首页搜索、按分类浏览，或进入详情页查看描述、平台信息和外部文档，快速判断一项能力是否适合继续深入。
                 </p>
-              </div>
+                <div className="site-footer-badge-row" aria-label="可浏览内容">
+                  <span className="site-footer-badge">Skill</span>
+                  <span className="site-footer-badge">MCP Server</span>
+                  <span className="site-footer-badge">公开资料入口</span>
+                </div>
+              </section>
             </div>
           </footer>
         </div>

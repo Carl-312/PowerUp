@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   return {
     title: `${CATEGORY_LABELS[categorySlug]} 分类`,
-    description: `浏览 ${CATEGORY_LABELS[categorySlug]} 分类下已发布的 Skill 与 MCP 条目，支持类型、排序与分页。`,
+    description: `浏览 ${CATEGORY_LABELS[categorySlug]} 分类下的 Skill 与 MCP 条目，快速找到同一方向里值得继续了解的内容。`,
   };
 }
 
@@ -47,36 +47,46 @@ export default async function CategoryPage({
   const result = listSkills(filters);
 
   return (
-    <div className="flex flex-col gap-8">
-      <section className="rounded-[32px] border border-zinc-200 bg-white/85 px-6 py-8 shadow-sm sm:px-8">
-        <div className="flex flex-col gap-4">
-          <Link href="/" className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900">
-            返回首页
-          </Link>
+    <div className="flex flex-col gap-6 md:gap-7">
+      <section className="powerup-panel powerup-panel-soft">
+        <div className="flex flex-col gap-5">
+          <div className="powerup-hero-actions">
+            <Link href="/" className="powerup-button-ghost powerup-button-link">
+              返回首页目录
+            </Link>
+            <Link href="#directory" className="powerup-button-secondary powerup-button-link">
+              查看结果
+            </Link>
+          </div>
+
           <div className="space-y-3">
-            <span className="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium tracking-[0.16em] text-zinc-600 uppercase">
-              Locked Category Context
-            </span>
-            <h1 className="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
-              {CATEGORY_LABELS[categorySlug]}
-            </h1>
-            <p className="max-w-3xl text-base leading-8 text-zinc-700">
-              这里复用首页的目录列表体验，只显示当前分类下的已发布条目。页面内保留类型、排序和分页，不提供分类切换器。
+            <p className="powerup-eyebrow">分类浏览</p>
+            <h1 className="powerup-page-title">{CATEGORY_LABELS[categorySlug]}</h1>
+            <p className="powerup-section-copy max-w-3xl">
+              这里聚合同一方向下的相关条目。你可以继续按类型筛选、调整排序，或逐页浏览，把范围一步步缩小到更贴合需求的结果。
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 pt-2 text-sm text-zinc-600">
-            <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-              共 {result.totalItems} 条已发布结果
-            </span>
-            <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-              当前分类 {CATEGORY_LABELS[categorySlug]}
-            </span>
-            {filters.type ? (
-              <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-                类型 {SKILL_TYPE_LABELS[filters.type]}
-              </span>
-            ) : null}
+          <div className="powerup-stat-grid">
+            <article className="powerup-stat-card powerup-stat-card-compact">
+              <span>Published</span>
+              <strong>{result.totalItems}</strong>
+              <p>这个分类下目前可浏览的结果。</p>
+            </article>
+            <article className="powerup-stat-card powerup-stat-card-compact">
+              <span>Page</span>
+              <strong>{result.page}</strong>
+              <p>可以顺着分页继续往下看更多内容。</p>
+            </article>
+            <article className="powerup-stat-card powerup-stat-card-compact">
+              <span>Sort</span>
+              <strong>{filters.sort === "updated_desc" ? "最近更新" : "名称 A-Z"}</strong>
+              <p>
+                {filters.type
+                  ? `目前只显示 ${SKILL_TYPE_LABELS[filters.type]} 类型。`
+                  : "当前展示这个分类下的全部类型。"}
+              </p>
+            </article>
           </div>
         </div>
       </section>
@@ -85,6 +95,7 @@ export default async function CategoryPage({
         pathname={`/category/${categorySlug}`}
         result={result}
         allowCategoryFilter={false}
+        variant="category"
       />
     </div>
   );
